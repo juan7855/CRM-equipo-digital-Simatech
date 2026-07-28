@@ -1,0 +1,151 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Rol {
+  admin
+  miembro
+}
+
+enum EstadoContenido {
+  idea
+  borrador
+  pendiente_aprobacion
+  aprobado
+  programado
+  publicado
+}
+
+enum EstadoTarea {
+  por_hacer
+  haciendo
+  hecho
+}
+
+enum Prioridad {
+  baja
+  media
+  alta
+}
+
+enum TipoSujetoHoras {
+  contenido
+  tarea
+}
+
+enum SeccionMarca {
+  colores
+  tipografia
+  tono
+  logo
+  correcto_incorrecto
+  archivos
+  referencias
+}
+
+model Usuario {
+  id        String   @id @default(uuid())
+  authId    String   @unique
+  email     String   @unique
+  nombre    String
+  rol       Rol      @default(miembro)
+  createdAt DateTime @default(now())
+
+  piezasAsignadas PiezaContenido[] @relation("PiezaAsignado")
+  tareasAsignadas Tarea[]          @relation("TareaAsignado")
+  registrosHoras  RegistroHoras[]
+
+  @@map("usuarios")
+}
+
+model Taxonomia {
+  id      String  @id @default(uuid())
+  tipo    String
+  etiqueta String
+  color   String  @default("#6366f1")
+  orden   Int     @default(0)
+
+  @@unique([tipo, etiqueta])
+  @@map("taxonomias")
+}
+
+model PiezaContenido {
+  id               String          @id @default(uuid())
+  titulo           String
+  fechaPublicacion DateTime
+  tipoContenido    String
+  objetivo         String
+  canal            String
+  formato          String?
+  dimensiones      String?
+  copy             String?
+  estado           EstadoContenido @default(idea)
+  notas            String?
+  asignadoAId      String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  asignadoA      Usuario?        @relation("PiezaAsignado", fields: [asignadoAId], references: [id])
+  tareas         Tarea[]
+  registrosHoras RegistroHoras[]
+
+  @@map("piezas_contenido")
+}
+
+model Tarea {
+  id               String      @id @default(uuid())
+  titulo           String
+  descripcion      String?
+  estado           EstadoTarea @default(por_hacer)
+  fechaLimite      DateTime?
+  prioridad        Prioridad   @default(media)
+  piezaContenidoId String?
+  asignadoAId      String?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  piezaContenido PiezaContenido? @relation(fields: [piezaContenidoId], references: [id], onDelete: SetNull)
+  asignadoA      Usuario?        @relation("TareaAsignado", fields: [asignadoAId], references: [id])
+  registrosHoras RegistroHoras[]
+
+  @@map("tareas")
+}
+
+model RegistroHoras {
+  id           String           @id @default(uuid())
+  tipoSujeto   TipoSujetoHoras
+  descripcion  String?
+  fecha        DateTime         @default(now())
+  minutos      Int
+  inicio       DateTime?
+  fin          DateTime?
+  createdAt    DateTime         @default(now())
+
+  usuarioId        String
+  usuario          Usuario         @relation(fields: [usuarioId], references: [id])
+  piezaContenidoId String?
+  piezaContenido   PiezaContenido? @relation(fields: [piezaContenidoId], references: [id], onDelete: Cascade)
+  tareaId          String?
+  tarea            Tarea?          @relation(fields: [tareaId], references: [id], onDelete: Cascade)
+
+  @@map("registros_horas")
+}
+
+model AssetMarca {
+  id          String        @id @default(uuid())
+  seccion     SeccionMarca
+  titulo      String
+  descripcion String?
+  valor       String?
+  rutaArchivo String?
+  orden       Int           @default(0)
+  createdAt   DateTime      @default(now())
+
+  @@map("assets_marca")
+}

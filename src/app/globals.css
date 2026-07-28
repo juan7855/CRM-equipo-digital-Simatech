@@ -1,14 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0b0d12;
-  --foreground: #e5e7eb;
-  --surface: #14161c;
-  --surface-muted: #1a1d24;
-  --border: #262a33;
-  --muted: #9aa0ac;
-  --accent: #818cf8;
-  --accent-foreground: #0b0d12;
+  --background: #0a0908;
+  --foreground: #f1ece4;
+  --surface: #15120f;
+  --surface-muted: #1c1814;
+  --border: #2c2620;
+  --muted: #a89f92;
+  --accent: #e8823a;
+  --accent-light: #f4a361;
+  --accent-dark: #b85e22;
+  --accent-foreground: #180d05;
 }
 
 @theme inline {
@@ -19,6 +21,8 @@
   --color-border: var(--border);
   --color-muted: var(--muted);
   --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-accent-dark: var(--accent-dark);
   --color-accent-foreground: var(--accent-foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -36,4 +40,68 @@ body {
 ::-webkit-scrollbar-thumb {
   background: var(--border);
   border-radius: 999px;
+}
+
+/* --- Animaciones --- */
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(232, 130, 58, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(232, 130, 58, 0);
+  }
+}
+
+@keyframes dot-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.85);
+  }
+}
+
+@keyframes drift {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-2%, 3%);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in-up 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-glow {
+  animation: glow-pulse 2.2s ease-in-out infinite;
+}
+
+.animate-dot-pulse {
+  animation: dot-pulse 1.4s ease-in-out infinite;
+}
+
+.bg-ambient-glow {
+  background-image: radial-gradient(circle at 15% 10%, rgba(232, 130, 58, 0.16), transparent 45%),
+    radial-gradient(circle at 85% 90%, rgba(232, 130, 58, 0.1), transparent 40%);
 }

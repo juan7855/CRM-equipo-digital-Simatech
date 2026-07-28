@@ -6,6 +6,7 @@ import { formatMinutos } from "@/lib/dates";
 import { piezaEnRiesgo, ESTADOS_CONTENIDO } from "@/lib/contenido";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
+import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
 
 export default async function DashboardPage() {
   const data = await getDashboardData();
@@ -21,17 +22,26 @@ export default async function DashboardPage() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
-        <Card className="p-4">
+        <Card className="relative overflow-hidden p-4">
+          <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-accent to-transparent" />
           <div className="text-xs text-muted">Piezas esta semana</div>
-          <div className="mt-1 text-2xl font-semibold">{data.piezasSemana.length}</div>
+          <div className="mt-1 text-2xl font-semibold tabular-nums">
+            <AnimatedNumber value={data.piezasSemana.length} />
+          </div>
         </Card>
-        <Card className="p-4">
+        <Card className="relative overflow-hidden p-4">
+          <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-accent to-transparent" />
           <div className="text-xs text-muted">Tareas abiertas</div>
-          <div className="mt-1 text-2xl font-semibold">{data.tareasAbiertas.length}</div>
+          <div className="mt-1 text-2xl font-semibold tabular-nums">
+            <AnimatedNumber value={data.tareasAbiertas.length} />
+          </div>
         </Card>
-        <Card className="p-4">
+        <Card className="relative overflow-hidden p-4">
+          <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-accent to-transparent" />
           <div className="text-xs text-muted">Horas registradas esta semana</div>
-          <div className="mt-1 text-2xl font-semibold">{formatMinutos(data.minutosTotales)}</div>
+          <div className="mt-1 text-2xl font-semibold tabular-nums">
+            <AnimatedNumber value={data.minutosTotales} format={formatMinutos} />
+          </div>
         </Card>
       </div>
 

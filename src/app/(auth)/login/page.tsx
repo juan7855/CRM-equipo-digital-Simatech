@@ -9,8 +9,11 @@ export default function LoginPage() {
   const [error, formAction, pending] = useActionState(login, undefined);
 
   return (
-    <div className="flex min-h-screen flex-1 items-center justify-center bg-background px-4">
-      <div className="w-full max-w-sm rounded-xl border border-border bg-surface p-6">
+    <div className="bg-ambient-glow relative flex min-h-screen flex-1 items-center justify-center overflow-hidden bg-background px-4">
+      <div className="animate-fade-in relative w-full max-w-sm rounded-xl border border-border bg-surface p-6 shadow-2xl shadow-black/40">
+        <div className="mb-4 flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-sm font-bold text-accent-foreground shadow-lg shadow-accent/30">
+          E
+        </div>
         <h1 className="mb-1 text-lg font-semibold">Equipo Digital Hub</h1>
         <p className="mb-6 text-sm text-muted">
           Herramienta interna de marketing y diseño. Entra con tu cuenta del equipo.

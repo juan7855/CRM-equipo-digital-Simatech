@@ -71,7 +71,7 @@ export function MonthGrid({
                     className="block w-full truncate rounded-md bg-accent/15 px-1.5 py-1 text-left text-[11px] text-accent hover:bg-accent/25"
                     title={p.titulo}
                   >
-                    {piezaEnRiesgo(p) && "⚠ "}
+                    {piezaEnRiesgo(p) && <span className="animate-dot-pulse mr-0.5 inline-block text-amber-400">⚠</span>}
                     {p.titulo}
                   </button>
                 ))}

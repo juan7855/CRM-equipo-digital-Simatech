@@ -35,7 +35,7 @@ export function ListaTable({
               className="cursor-pointer border-b border-border last:border-0 hover:bg-surface-muted"
             >
               <td className="px-4 py-2.5 font-medium">
-                {piezaEnRiesgo(p) && <span className="mr-1 text-amber-400">⚠</span>}
+                {piezaEnRiesgo(p) && <span className="animate-dot-pulse mr-1 inline-block text-amber-400">⚠</span>}
                 {p.titulo}
               </td>
               <td className="px-4 py-2.5 text-muted">

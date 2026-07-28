@@ -63,7 +63,12 @@ export function Timer({ piezas, tareas }: { piezas: Sujeto[]; tareas: Sujeto[] }
 
   return (
     <div className="space-y-3">
-      <div className="text-center font-mono text-3xl font-semibold tabular-nums">
+      <div
+        className={`flex items-center justify-center gap-2 rounded-lg py-2 text-center font-mono text-3xl font-semibold tabular-nums transition-all duration-300 ${
+          corriendo ? "animate-glow bg-accent/10 text-accent" : ""
+        }`}
+      >
+        {corriendo && <span className="h-2 w-2 animate-dot-pulse rounded-full bg-accent" />}
         {hh}:{mm}:{ss}
       </div>
       <SelectorSujeto

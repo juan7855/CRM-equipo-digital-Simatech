@@ -52,7 +52,9 @@ export function KanbanContenido({
                   className="cursor-pointer rounded-lg border border-border bg-surface-muted p-2 text-xs hover:border-accent/50"
                 >
                   <div className="font-medium">
-                    {piezaEnRiesgo(p) && <span className="mr-1 text-amber-400">⚠</span>}
+                    {piezaEnRiesgo(p) && (
+                      <span className="animate-dot-pulse mr-1 inline-block text-amber-400">⚠</span>
+                    )}
                     {p.titulo}
                   </div>
                   <div className="mt-1 text-muted">

@@ -40,7 +40,7 @@ export default async function DashboardPage() {
           <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-accent to-transparent" />
           <div className="text-xs text-muted">Horas registradas esta semana</div>
           <div className="mt-1 text-2xl font-semibold tabular-nums">
-            <AnimatedNumber value={data.minutosTotales} format={formatMinutos} />
+            <AnimatedNumber value={data.minutosTotales} unidad="minutos" />
           </div>
         </Card>
       </div>

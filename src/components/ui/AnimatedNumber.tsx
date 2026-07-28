@@ -1,15 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { formatMinutos } from "@/lib/dates";
 
 export function AnimatedNumber({
   value,
   duration = 700,
-  format = (n: number) => String(n),
+  unidad = "numero",
 }: {
   value: number;
   duration?: number;
-  format?: (n: number) => string;
+  unidad?: "numero" | "minutos";
 }) {
   const [mostrado, setMostrado] = useState(0);
   const inicioRef = useRef<number | null>(null);
@@ -30,5 +31,5 @@ export function AnimatedNumber({
     return () => cancelAnimationFrame(frame);
   }, [value, duration]);
 
-  return <span>{format(mostrado)}</span>;
+  return <span>{unidad === "minutos" ? formatMinutos(mostrado) : mostrado}</span>;
 }

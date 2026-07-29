@@ -2,7 +2,7 @@
 
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/Badge";
-import { ESTADOS_TAREA } from "@/lib/contenido";
+import { ESTADOS_PIPELINE } from "@/lib/contenido";
 import { formatMinutos } from "@/lib/dates";
 import type { TareaConRelaciones } from "./TareasClient";
 
@@ -49,7 +49,7 @@ export function ListaTareas({
                 <td className="px-4 py-2.5 text-muted">{minutos > 0 ? formatMinutos(minutos) : "—"}</td>
                 <td className="px-4 py-2.5">
                   <Badge
-                    label={ESTADOS_TAREA.find((e) => e.value === t.estado)?.label ?? t.estado}
+                    label={ESTADOS_PIPELINE.find((e) => e.value === t.estado)?.label ?? t.estado}
                     color="#34d399"
                   />
                 </td>

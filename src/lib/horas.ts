@@ -19,11 +19,10 @@ export async function getHorasData() {
     porPersona.set(r.usuario.nombre, (porPersona.get(r.usuario.nombre) ?? 0) + r.minutos);
 
     if (r.piezaContenido) {
-      porTipoContenido.set(
-        r.piezaContenido.tipoContenido,
-        (porTipoContenido.get(r.piezaContenido.tipoContenido) ?? 0) + r.minutos
-      );
-      porCanal.set(r.piezaContenido.canal, (porCanal.get(r.piezaContenido.canal) ?? 0) + r.minutos);
+      const tipo = r.piezaContenido.tipoContenido ?? "Sin tipo";
+      const canal = r.piezaContenido.canal ?? "Sin canal";
+      porTipoContenido.set(tipo, (porTipoContenido.get(tipo) ?? 0) + r.minutos);
+      porCanal.set(canal, (porCanal.get(canal) ?? 0) + r.minutos);
     }
 
     const semana = format(r.fecha, "yyyy-'S'ww");

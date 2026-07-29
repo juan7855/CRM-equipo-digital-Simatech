@@ -3,7 +3,7 @@
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Badge } from "@/components/ui/Badge";
-import { ESTADOS_CONTENIDO, piezaEnRiesgo } from "@/lib/contenido";
+import { ESTADOS_PIPELINE, piezaEnRiesgo } from "@/lib/contenido";
 import type { Pieza } from "./CalendarioClient";
 
 export function ListaTable({
@@ -39,15 +39,15 @@ export function ListaTable({
                 {p.titulo}
               </td>
               <td className="px-4 py-2.5 text-muted">
-                {format(p.fechaPublicacion, "d MMM yyyy", { locale: es })}
+                {p.fechaPublicacion ? format(p.fechaPublicacion, "d MMM yyyy", { locale: es }) : "Sin fecha"}
               </td>
-              <td className="px-4 py-2.5">{p.canal}</td>
-              <td className="px-4 py-2.5">{p.tipoContenido}</td>
-              <td className="px-4 py-2.5">{p.objetivo}</td>
+              <td className="px-4 py-2.5">{p.canal ?? "—"}</td>
+              <td className="px-4 py-2.5">{p.tipoContenido ?? "—"}</td>
+              <td className="px-4 py-2.5">{p.objetivo ?? "—"}</td>
               <td className="px-4 py-2.5 text-muted">{p.asignadoA?.nombre ?? "—"}</td>
               <td className="px-4 py-2.5">
                 <Badge
-                  label={ESTADOS_CONTENIDO.find((e) => e.value === p.estado)?.label ?? p.estado}
+                  label={ESTADOS_PIPELINE.find((e) => e.value === p.estado)?.label ?? p.estado}
                   color="#818cf8"
                 />
               </td>

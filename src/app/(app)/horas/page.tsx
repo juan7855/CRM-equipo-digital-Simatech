@@ -11,7 +11,7 @@ export default async function HorasPage() {
     }),
     prisma.tarea.findMany({
       select: { id: true, titulo: true },
-      where: { estado: { not: "hecho" } },
+      where: { estado: { not: "programado" } },
       orderBy: { createdAt: "desc" },
       take: 100,
     }),

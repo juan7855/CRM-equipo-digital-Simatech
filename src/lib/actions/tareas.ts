@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { requireUsuario } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
-import type { EstadoTarea, Prioridad } from "@prisma/client";
+import type { EstadoPipeline, Prioridad } from "@prisma/client";
 
 function leerCamposTarea(formData: FormData) {
   const asignadoAId = String(formData.get("asignadoAId") ?? "");
@@ -12,7 +12,7 @@ function leerCamposTarea(formData: FormData) {
   return {
     titulo: String(formData.get("titulo") ?? ""),
     descripcion: String(formData.get("descripcion") ?? "") || null,
-    estado: String(formData.get("estado") ?? "por_hacer") as EstadoTarea,
+    estado: String(formData.get("estado") ?? "idea") as EstadoPipeline,
     prioridad: String(formData.get("prioridad") ?? "media") as Prioridad,
     fechaLimite: fechaLimite ? new Date(fechaLimite) : null,
     asignadoAId: asignadoAId || null,
@@ -35,7 +35,7 @@ export async function guardarTarea(formData: FormData) {
   revalidatePath("/");
 }
 
-export async function actualizarEstadoTarea(id: string, estado: EstadoTarea) {
+export async function actualizarEstadoTarea(id: string, estado: EstadoPipeline) {
   await requireUsuario();
   await prisma.tarea.update({ where: { id }, data: { estado } });
   revalidatePath("/tareas");

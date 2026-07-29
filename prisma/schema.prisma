@@ -13,19 +13,17 @@ enum Rol {
   miembro
 }
 
-enum EstadoContenido {
+enum EstadoPipeline {
   idea
-  borrador
-  pendiente_aprobacion
-  aprobado
+  redaccion
+  diseno
+  aprobacion
   programado
-  publicado
 }
 
-enum EstadoTarea {
-  por_hacer
-  haciendo
-  hecho
+enum Publico {
+  buyer_persona
+  audience_persona
 }
 
 enum Prioridad {
@@ -76,20 +74,21 @@ model Taxonomia {
 }
 
 model PiezaContenido {
-  id               String          @id @default(uuid())
+  id               String         @id @default(uuid())
   titulo           String
-  fechaPublicacion DateTime
-  tipoContenido    String
-  objetivo         String
-  canal            String
+  fechaPublicacion DateTime?
+  tipoContenido    String?
+  objetivo         String?
+  canal            String?
+  publico          Publico?
   formato          String?
   dimensiones      String?
   copy             String?
-  estado           EstadoContenido @default(idea)
+  estado           EstadoPipeline @default(idea)
   notas            String?
   asignadoAId      String?
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
 
   asignadoA      Usuario?        @relation("PiezaAsignado", fields: [asignadoAId], references: [id])
   tareas         Tarea[]
@@ -99,16 +98,16 @@ model PiezaContenido {
 }
 
 model Tarea {
-  id               String      @id @default(uuid())
+  id               String         @id @default(uuid())
   titulo           String
   descripcion      String?
-  estado           EstadoTarea @default(por_hacer)
+  estado           EstadoPipeline @default(idea)
   fechaLimite      DateTime?
-  prioridad        Prioridad   @default(media)
+  prioridad        Prioridad      @default(media)
   piezaContenidoId String?
   asignadoAId      String?
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @updatedAt
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
 
   piezaContenido PiezaContenido? @relation(fields: [piezaContenidoId], references: [id], onDelete: SetNull)
   asignadoA      Usuario?        @relation("TareaAsignado", fields: [asignadoAId], references: [id])

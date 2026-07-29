@@ -6,7 +6,7 @@ import type { AssetMarca, Usuario } from "@prisma/client";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Select, Textarea } from "@/components/ui/Field";
-import { ESTADOS_CONTENIDO } from "@/lib/contenido";
+import { ESTADOS_PIPELINE, PUBLICOS } from "@/lib/contenido";
 import { guardarPieza, eliminarPieza, duplicarPieza } from "@/lib/actions/contenido";
 import type { Pieza, Taxonomias } from "./CalendarioClient";
 
@@ -68,20 +68,44 @@ export function PiezaModal({
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <Label>Fecha de publicación</Label>
+            <Label>Fecha de publicación (vacío = queda en el banco de ideas)</Label>
             <Input
               type="date"
               name="fechaPublicacion"
-              required
-              defaultValue={pieza ? format(pieza.fechaPublicacion, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd")}
+              defaultValue={pieza?.fechaPublicacion ? format(pieza.fechaPublicacion, "yyyy-MM-dd") : ""}
             />
           </div>
           <div>
             <Label>Estado</Label>
             <Select name="estado" defaultValue={pieza?.estado ?? "idea"}>
-              {ESTADOS_CONTENIDO.map((e) => (
+              {ESTADOS_PIPELINE.map((e) => (
                 <option key={e.value} value={e.value}>
                   {e.label}
+                </option>
+              ))}
+            </Select>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <Label>Público objetivo</Label>
+            <Select name="publico" defaultValue={pieza?.publico ?? ""}>
+              <option value="">Sin definir</option>
+              {PUBLICOS.map((p) => (
+                <option key={p.value} value={p.value}>
+                  {p.label}
+                </option>
+              ))}
+            </Select>
+          </div>
+          <div>
+            <Label>Asignado a</Label>
+            <Select name="asignadoAId" defaultValue={pieza?.asignadoAId ?? ""}>
+              <option value="">Sin asignar</option>
+              {usuarios.map((u) => (
+                <option key={u.id} value={u.id}>
+                  {u.nombre}
                 </option>
               ))}
             </Select>
@@ -91,10 +115,8 @@ export function PiezaModal({
         <div className="grid grid-cols-3 gap-3">
           <div>
             <Label>Tipo de contenido</Label>
-            <Select name="tipoContenido" required defaultValue={pieza?.tipoContenido}>
-              <option value="" disabled>
-                Elegir…
-              </option>
+            <Select name="tipoContenido" defaultValue={pieza?.tipoContenido ?? ""}>
+              <option value="">Sin definir</option>
               {taxonomias.tipo_contenido?.map((t) => (
                 <option key={t.id} value={t.etiqueta}>
                   {t.etiqueta}
@@ -104,10 +126,8 @@ export function PiezaModal({
           </div>
           <div>
             <Label>Objetivo</Label>
-            <Select name="objetivo" required defaultValue={pieza?.objetivo}>
-              <option value="" disabled>
-                Elegir…
-              </option>
+            <Select name="objetivo" defaultValue={pieza?.objetivo ?? ""}>
+              <option value="">Sin definir</option>
               {taxonomias.objetivo?.map((o) => (
                 <option key={o.id} value={o.etiqueta}>
                   {o.etiqueta}
@@ -117,10 +137,8 @@ export function PiezaModal({
           </div>
           <div>
             <Label>Canal</Label>
-            <Select name="canal" required defaultValue={pieza?.canal}>
-              <option value="" disabled>
-                Elegir…
-              </option>
+            <Select name="canal" defaultValue={pieza?.canal ?? ""}>
+              <option value="">Sin definir</option>
               {taxonomias.canal?.map((c) => (
                 <option key={c.id} value={c.etiqueta}>
                   {c.etiqueta}
@@ -139,18 +157,6 @@ export function PiezaModal({
             <Label>Dimensiones</Label>
             <Input name="dimensiones" defaultValue={pieza?.dimensiones ?? ""} placeholder="1080x1350" />
           </div>
-        </div>
-
-        <div>
-          <Label>Asignado a</Label>
-          <Select name="asignadoAId" defaultValue={pieza?.asignadoAId ?? ""}>
-            <option value="">Sin asignar</option>
-            {usuarios.map((u) => (
-              <option key={u.id} value={u.id}>
-                {u.nombre}
-              </option>
-            ))}
-          </Select>
         </div>
 
         <div>

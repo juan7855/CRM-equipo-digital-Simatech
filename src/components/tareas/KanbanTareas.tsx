@@ -2,8 +2,8 @@
 
 import { useTransition } from "react";
 import { format } from "date-fns";
-import type { EstadoTarea } from "@prisma/client";
-import { ESTADOS_TAREA } from "@/lib/contenido";
+import type { EstadoPipeline } from "@prisma/client";
+import { ESTADOS_PIPELINE } from "@/lib/contenido";
 import { formatMinutos } from "@/lib/dates";
 import { actualizarEstadoTarea } from "@/lib/actions/tareas";
 import type { TareaConRelaciones } from "./TareasClient";
@@ -17,7 +17,7 @@ export function KanbanTareas({
 }) {
   const [, startTransition] = useTransition();
 
-  function onDrop(e: React.DragEvent, estado: EstadoTarea) {
+  function onDrop(e: React.DragEvent, estado: EstadoPipeline) {
     e.preventDefault();
     const id = e.dataTransfer.getData("text/plain");
     if (!id) return;
@@ -27,13 +27,13 @@ export function KanbanTareas({
   }
 
   return (
-    <div className="grid gap-3 sm:grid-cols-3">
-      {ESTADOS_TAREA.map((columna) => (
+    <div className="grid gap-3 overflow-x-auto pb-2 sm:grid-cols-3 lg:grid-cols-5">
+      {ESTADOS_PIPELINE.map((columna) => (
         <div
           key={columna.value}
           onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => onDrop(e, columna.value as EstadoTarea)}
-          className="rounded-xl border border-border bg-surface p-2"
+          onDrop={(e) => onDrop(e, columna.value as EstadoPipeline)}
+          className="min-w-[200px] rounded-xl border border-border bg-surface p-2"
         >
           <div className="mb-2 flex items-center justify-between px-1">
             <h3 className="text-xs font-semibold text-muted">{columna.label}</h3>

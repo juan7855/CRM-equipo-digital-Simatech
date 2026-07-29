@@ -4,14 +4,14 @@ import { currentWeekRange } from "@/lib/dates";
 export async function getDashboardData() {
   const { inicio, fin } = currentWeekRange();
 
-  const [piezasSemana, tareasAbiertas, registrosSemana] = await Promise.all([
+  const [piezasSemana, tareasAbiertas, registrosSemana, bancoIdeas] = await Promise.all([
     prisma.piezaContenido.findMany({
       where: { fechaPublicacion: { gte: inicio, lte: fin } },
       include: { asignadoA: true },
       orderBy: { fechaPublicacion: "asc" },
     }),
     prisma.tarea.findMany({
-      where: { estado: { not: "hecho" } },
+      where: { estado: { not: "programado" } },
       include: { asignadoA: true, piezaContenido: true },
       orderBy: [{ fechaLimite: "asc" }],
       take: 8,
@@ -19,6 +19,11 @@ export async function getDashboardData() {
     prisma.registroHoras.findMany({
       where: { fecha: { gte: inicio, lte: fin } },
       include: { usuario: true },
+    }),
+    prisma.piezaContenido.findMany({
+      where: { fechaPublicacion: null },
+      orderBy: { createdAt: "desc" },
+      take: 20,
     }),
   ]);
 
@@ -37,7 +42,10 @@ export async function getDashboardData() {
     }
   }
 
-  const publicadasSemana = piezasSemana.filter((p) => p.estado === "publicado");
+  const programadasSemana = piezasSemana.filter((p) => p.estado === "programado");
+
+  const buyerCount = piezasSemana.filter((p) => p.publico === "buyer_persona").length;
+  const audienceCount = piezasSemana.filter((p) => p.publico === "audience_persona").length;
 
   return {
     rangoSemana: { inicio, fin },
@@ -45,6 +53,8 @@ export async function getDashboardData() {
     tareasAbiertas,
     minutosTotales,
     minutosPorPersona: Array.from(minutosPorPersona.values()).sort((a, b) => b.minutos - a.minutos),
-    publicadasSemana,
+    programadasSemana,
+    publico: { buyerCount, audienceCount },
+    bancoIdeas,
   };
 }

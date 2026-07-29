@@ -3,13 +3,15 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { getDashboardData } from "@/lib/dashboard";
 import { formatMinutos } from "@/lib/dates";
-import { piezaEnRiesgo, ESTADOS_CONTENIDO } from "@/lib/contenido";
+import { piezaEnRiesgo, ESTADOS_PIPELINE } from "@/lib/contenido";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
+import { BancoIdeas } from "@/components/dashboard/BancoIdeas";
 
 export default async function DashboardPage() {
   const data = await getDashboardData();
+  const totalPublico = data.publico.buyerCount + data.publico.audienceCount;
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
@@ -28,6 +30,25 @@ export default async function DashboardPage() {
           <div className="mt-1 text-2xl font-semibold tabular-nums">
             <AnimatedNumber value={data.piezasSemana.length} />
           </div>
+          {totalPublico > 0 ? (
+            <div className="mt-2">
+              <div className="mb-1 flex h-1.5 overflow-hidden rounded-full bg-surface-muted">
+                <div
+                  className="h-full bg-accent"
+                  style={{ width: `${(data.publico.buyerCount / totalPublico) * 100}%` }}
+                />
+                <div
+                  className="h-full bg-[#5b8fd9]"
+                  style={{ width: `${(data.publico.audienceCount / totalPublico) * 100}%` }}
+                />
+              </div>
+              <div className="text-xs text-muted">
+                {data.publico.buyerCount} Buyer / {data.publico.audienceCount} Audience
+              </div>
+            </div>
+          ) : (
+            <div className="mt-2 text-xs text-muted">Sin público asignado esta semana</div>
+          )}
         </Card>
         <Card className="relative overflow-hidden p-4">
           <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-accent to-transparent" />
@@ -65,13 +86,13 @@ export default async function DashboardPage() {
                 <div className="min-w-0">
                   <div className="truncate font-medium">{pieza.titulo}</div>
                   <div className="text-xs text-muted">
-                    {format(pieza.fechaPublicacion, "EEE d MMM", { locale: es })} · {pieza.canal}
+                    {format(pieza.fechaPublicacion!, "EEE d MMM", { locale: es })} · {pieza.canal ?? "Sin canal"}
                   </div>
                 </div>
                 <div className="flex shrink-0 items-center gap-2">
                   {piezaEnRiesgo(pieza) && <Badge label="Faltan datos" color="#f59e0b" />}
                   <Badge
-                    label={ESTADOS_CONTENIDO.find((e) => e.value === pieza.estado)?.label ?? pieza.estado}
+                    label={ESTADOS_PIPELINE.find((e) => e.value === pieza.estado)?.label ?? pieza.estado}
                     color="#818cf8"
                   />
                 </div>
@@ -104,7 +125,10 @@ export default async function DashboardPage() {
                       ` · vence ${format(tarea.fechaLimite, "d MMM", { locale: es })}`}
                   </div>
                 </div>
-                <Badge label={tarea.estado.replace("_", " ")} color="#34d399" />
+                <Badge
+                  label={ESTADOS_PIPELINE.find((e) => e.value === tarea.estado)?.label ?? tarea.estado}
+                  color="#34d399"
+                />
               </li>
             ))}
           </ul>
@@ -115,12 +139,12 @@ export default async function DashboardPage() {
         <h2 className="mb-3 text-sm font-semibold">Resumen semanal</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <div className="mb-2 text-xs font-medium text-muted">Publicado esta semana</div>
-            {data.publicadasSemana.length === 0 ? (
-              <p className="text-sm text-muted">Nada publicado todavía.</p>
+            <div className="mb-2 text-xs font-medium text-muted">Programado esta semana</div>
+            {data.programadasSemana.length === 0 ? (
+              <p className="text-sm text-muted">Nada en estado &quot;Programado&quot; todavía.</p>
             ) : (
               <ul className="space-y-1 text-sm">
-                {data.publicadasSemana.map((p) => (
+                {data.programadasSemana.map((p) => (
                   <li key={p.id}>· {p.titulo}</li>
                 ))}
               </ul>
@@ -142,6 +166,11 @@ export default async function DashboardPage() {
             )}
           </div>
         </div>
+      </Card>
+
+      <Card className="p-4">
+        <h2 className="mb-3 text-sm font-semibold">Banco de ideas</h2>
+        <BancoIdeas ideas={data.bancoIdeas} />
       </Card>
     </div>
   );

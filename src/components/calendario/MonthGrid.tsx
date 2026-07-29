@@ -21,6 +21,7 @@ export function MonthGrid({
   onSeleccionarPieza: (p: Pieza) => void;
 }) {
   const semanas = buildMonthGrid(mesActual);
+  const piezasConFecha = piezas.filter((p): p is Pieza & { fechaPublicacion: Date } => p.fechaPublicacion !== null);
 
   return (
     <div className="rounded-xl border border-border bg-surface p-3">
@@ -48,7 +49,7 @@ export function MonthGrid({
           </div>
         ))}
         {semanas.flat().map((dia) => {
-          const piezasDelDia = piezas.filter((p) => isSameDay(p.fechaPublicacion, dia));
+          const piezasDelDia = piezasConFecha.filter((p) => isSameDay(p.fechaPublicacion, dia));
           return (
             <div
               key={dia.toISOString()}

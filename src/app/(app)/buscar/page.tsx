@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import { prisma } from "@/lib/prisma";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
+import { ESTADOS_PIPELINE } from "@/lib/contenido";
 
 export default async function BuscarPage({
   searchParams,
@@ -61,7 +62,9 @@ export default async function BuscarPage({
               <li key={p.id}>
                 <Link href="/calendario" className="flex items-center justify-between text-sm hover:text-accent">
                   <span>{p.titulo}</span>
-                  <span className="text-xs text-muted">{format(p.fechaPublicacion, "d MMM yyyy")}</span>
+                  <span className="text-xs text-muted">
+                    {p.fechaPublicacion ? format(p.fechaPublicacion, "d MMM yyyy") : "Banco de ideas"}
+                  </span>
                 </Link>
               </li>
             ))}
@@ -77,7 +80,10 @@ export default async function BuscarPage({
               <li key={t.id}>
                 <Link href="/tareas" className="flex items-center justify-between text-sm hover:text-accent">
                   <span>{t.titulo}</span>
-                  <Badge label={t.estado.replace("_", " ")} color="#34d399" />
+                  <Badge
+                    label={ESTADOS_PIPELINE.find((e) => e.value === t.estado)?.label ?? t.estado}
+                    color="#34d399"
+                  />
                 </Link>
               </li>
             ))}

@@ -6,7 +6,7 @@ import type { Usuario } from "@prisma/client";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Select, Textarea } from "@/components/ui/Field";
-import { ESTADOS_TAREA, PRIORIDADES } from "@/lib/contenido";
+import { ESTADOS_PIPELINE, PRIORIDADES } from "@/lib/contenido";
 import { formatMinutos } from "@/lib/dates";
 import { guardarTarea, eliminarTarea } from "@/lib/actions/tareas";
 import type { TareaConRelaciones } from "./TareasClient";
@@ -59,8 +59,8 @@ export function TareaModal({
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label>Estado</Label>
-            <Select name="estado" defaultValue={tarea?.estado ?? "por_hacer"}>
-              {ESTADOS_TAREA.map((e) => (
+            <Select name="estado" defaultValue={tarea?.estado ?? "idea"}>
+              {ESTADOS_PIPELINE.map((e) => (
                 <option key={e.value} value={e.value}>
                   {e.label}
                 </option>

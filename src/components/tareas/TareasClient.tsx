@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { Tarea, Usuario, PiezaContenido, RegistroHoras } from "@prisma/client";
+import type { Tarea, Usuario, PiezaContenido, RegistroHoras, Objetivo } from "@prisma/client";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Field";
 import { KanbanTareas } from "./KanbanTareas";
@@ -12,16 +12,19 @@ export type TareaConRelaciones = Tarea & {
   asignadoA: Usuario | null;
   piezaContenido: Pick<PiezaContenido, "id" | "titulo"> | null;
   registrosHoras: RegistroHoras[];
+  objetivo: Pick<Objetivo, "id" | "titulo"> | null;
 };
 
 export function TareasClient({
   tareas,
   usuarios,
   piezas,
+  objetivos,
 }: {
   tareas: TareaConRelaciones[];
   usuarios: Usuario[];
   piezas: { id: string; titulo: string }[];
+  objetivos: { id: string; titulo: string }[];
 }) {
   const [vista, setVista] = useState<"kanban" | "lista">("kanban");
   const [filtroPersona, setFiltroPersona] = useState("");
@@ -93,6 +96,7 @@ export function TareasClient({
         tarea={tareaEditando}
         usuarios={usuarios}
         piezas={piezas}
+        objetivos={objetivos}
       />
     </div>
   );

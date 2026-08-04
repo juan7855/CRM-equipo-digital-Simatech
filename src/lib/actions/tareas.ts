@@ -8,6 +8,7 @@ import type { EstadoPipeline, Prioridad } from "@prisma/client";
 function leerCamposTarea(formData: FormData) {
   const asignadoAId = String(formData.get("asignadoAId") ?? "");
   const piezaContenidoId = String(formData.get("piezaContenidoId") ?? "");
+  const objetivoId = String(formData.get("objetivoId") ?? "");
   const fechaLimite = String(formData.get("fechaLimite") ?? "");
   return {
     titulo: String(formData.get("titulo") ?? ""),
@@ -17,6 +18,7 @@ function leerCamposTarea(formData: FormData) {
     fechaLimite: fechaLimite ? new Date(fechaLimite) : null,
     asignadoAId: asignadoAId || null,
     piezaContenidoId: piezaContenidoId || null,
+    objetivoId: objetivoId || null,
   };
 }
 
@@ -32,6 +34,7 @@ export async function guardarTarea(formData: FormData) {
   }
 
   revalidatePath("/tareas");
+  revalidatePath("/objetivos");
   revalidatePath("/");
 }
 
@@ -39,6 +42,7 @@ export async function actualizarEstadoTarea(id: string, estado: EstadoPipeline) 
   await requireUsuario();
   await prisma.tarea.update({ where: { id }, data: { estado } });
   revalidatePath("/tareas");
+  revalidatePath("/objetivos");
   revalidatePath("/");
 }
 
@@ -46,5 +50,6 @@ export async function eliminarTarea(id: string) {
   await requireUsuario();
   await prisma.tarea.delete({ where: { id } });
   revalidatePath("/tareas");
+  revalidatePath("/objetivos");
   revalidatePath("/");
 }

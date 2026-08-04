@@ -17,12 +17,14 @@ export function TareaModal({
   tarea,
   usuarios,
   piezas,
+  objetivos,
 }: {
   open: boolean;
   onClose: () => void;
   tarea: TareaConRelaciones | null;
   usuarios: Usuario[];
   piezas: { id: string; titulo: string }[];
+  objetivos: { id: string; titulo: string }[];
 }) {
   const [enviando, setEnviando] = useState(false);
   const minutos = tarea?.registrosHoras.reduce((acc, r) => acc + r.minutos, 0) ?? 0;
@@ -108,6 +110,18 @@ export function TareaModal({
             {piezas.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.titulo}
+              </option>
+            ))}
+          </Select>
+        </div>
+
+        <div>
+          <Label>Objetivo relacionado (opcional)</Label>
+          <Select name="objetivoId" defaultValue={tarea?.objetivoId ?? ""}>
+            <option value="">Ninguno</option>
+            {objetivos.map((o) => (
+              <option key={o.id} value={o.id}>
+                {o.titulo}
               </option>
             ))}
           </Select>

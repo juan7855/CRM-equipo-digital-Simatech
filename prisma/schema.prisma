@@ -47,6 +47,12 @@ enum SeccionMarca {
   referencias
 }
 
+enum EstadoObjetivo {
+  activo
+  pausado
+  logrado
+}
+
 model Usuario {
   id        String   @id @default(uuid())
   authId    String   @unique
@@ -106,14 +112,30 @@ model Tarea {
   prioridad        Prioridad      @default(media)
   piezaContenidoId String?
   asignadoAId      String?
+  objetivoId       String?
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
 
   piezaContenido PiezaContenido? @relation(fields: [piezaContenidoId], references: [id], onDelete: SetNull)
   asignadoA      Usuario?        @relation("TareaAsignado", fields: [asignadoAId], references: [id])
+  objetivo       Objetivo?       @relation(fields: [objetivoId], references: [id], onDelete: SetNull)
   registrosHoras RegistroHoras[]
 
   @@map("tareas")
+}
+
+model Objetivo {
+  id            String         @id @default(uuid())
+  titulo        String
+  porQue        String
+  estado        EstadoObjetivo @default(activo)
+  fechaObjetivo DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  tareas Tarea[]
+
+  @@map("objetivos")
 }
 
 model RegistroHoras {
